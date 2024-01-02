@@ -1,0 +1,140 @@
+openapi: 3.0.0
+info:
+  title: AWS Rekognition Collection API
+  version: 1.0.0
+paths:
+  /list-collections:
+    get:
+      summary: Get a list of collections
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  collections:
+                    type: array
+                    items:
+                      type: string
+      
+  /create-collection:
+    post:
+      summary: Create a collection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                collectionName:
+                  type: string
+      responses:
+        '200':
+          description: OK
+  /delete-collection:
+    delete:
+      summary: Delete a collection
+      parameters:
+        - name: collectionId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+  /list-faces:
+    get:
+      summary: Get information about faces in a collection
+      parameters:
+        - name: collectionId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  faceCount:
+                    type: integer
+  /index-faces:
+    post:
+      summary: Add images to a collection
+      parameters:
+        - name: collectionId
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                faceId:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          
+  /delete-faces:
+    delete:
+      summary: Delete faces from a collection
+      parameters:
+        - name: collectionId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: faceId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          
+  /search-faces-by-image:
+    post:
+      summary: Search for faces in a collection using an image
+      parameters:
+        - name: collectionId
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mostSimilarCollection:
+                    type: string
